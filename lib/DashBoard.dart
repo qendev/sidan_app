@@ -114,6 +114,7 @@ class _DashBoardState extends State<DashBoard> {
                           fontSize: 18.0,
                         )
                     ),
+                    SizedBox(height: 3,),
                     Text(
                         'TOP SERVICES',
                         style: TextStyle(
@@ -121,6 +122,7 @@ class _DashBoardState extends State<DashBoard> {
                           fontSize: 12.0,
                         )
                     ),
+                    SizedBox(height: 3,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -328,6 +330,7 @@ class _DashBoardState extends State<DashBoard> {
                           fontSize: 18.0,
                         )
                     ),
+                    SizedBox(height: 3,),
                     Text(
                         'TOP SERVICES',
                         style: TextStyle(
@@ -335,6 +338,7 @@ class _DashBoardState extends State<DashBoard> {
                           fontSize: 12.0,
                         )
                     ),
+                    SizedBox(height: 3,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
