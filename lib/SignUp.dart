@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sidan_app/LoginPage.dart';
+import 'package:services/services.dart';
 
 void main() => runApp(
     MaterialApp(
@@ -51,8 +52,7 @@ class _SignUpState extends State<SignUp> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: TextField(
-                    // controller: _passwordController,
-                    obscureText: true,
+                    // controller: _passwordController
                     style: TextStyle(fontSize: 14, color: Colors.black),
                     decoration: InputDecoration(
                       // keyboardType: TextInputType.number,
@@ -77,7 +77,6 @@ class _SignUpState extends State<SignUp> {
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: TextField(
                     // controller: _passwordController,
-                    obscureText: true,
                     style: TextStyle(fontSize: 14, color: Colors.black),
                     decoration: InputDecoration(
                       // keyboardType: TextInputType.number,
@@ -102,7 +101,6 @@ class _SignUpState extends State<SignUp> {
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: TextField(
                     // controller: _passwordController,
-                    obscureText: true,
                     style: TextStyle(fontSize: 14, color: Colors.black),
                     decoration: InputDecoration(
                       // keyboardType: TextInputType.number,

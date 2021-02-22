@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sidan_app/CartOne.dart';
+import 'package:sidan_app/MyDart.dart';
+import 'package:sidan_app/ScheduleOrder.dart';
 
 void main() => runApp(
     MaterialApp(
@@ -13,6 +16,14 @@ class DashBoard extends StatefulWidget {
 }
 
 class _DashBoardState extends State<DashBoard> {
+  int counter = 0;
+  int selectedIndex = 1;
+
+  void ItemTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,10 +60,24 @@ class _DashBoardState extends State<DashBoard> {
                           )
                         ],
                       ),
-                      Icon(
-                        Icons.shopping_basket,
-                        color: Colors.orangeAccent,
-                        size: 30.0,
+                      RaisedButton(
+                        elevation : 0,
+                        color: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(1.0),
+                          ),
+                          onPressed: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ScheduleOrder()),
+                            );
+                          },
+                          child:
+                          Icon(
+                            Icons.shopping_basket,
+                            color: Colors.orangeAccent,
+                            size: 30.0,
+                          ),
                       ),
                     ],
                   ),
@@ -108,7 +133,7 @@ class _DashBoardState extends State<DashBoard> {
                 child: ListView(
                   children: [
                     Text(
-                        'Home Services',
+                        'House Services',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18.0,
@@ -129,48 +154,56 @@ class _DashBoardState extends State<DashBoard> {
                         SizedBox(
                           height: 100,
                           width: 160,
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            color: Colors.white,
-                            elevation: 2.0,
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 1),
-                                  child: SizedBox(
-                                    height: 40,
-                                    width: 40,
-                                    child: Image(
-                                      image: AssetImage('assets/Group.png'),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => CartOne()),
+                              );
+                            },
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              color: Colors.white,
+                              elevation: 2.0,
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 1),
+                                    child: SizedBox(
+                                      height: 40,
+                                      width: 40,
+                                      child: Image(
+                                        image: AssetImage('assets/Group.png'),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(width: 5,),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 20, 0, 1),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                          'Wash Clothes',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14.0,
-                                          )
-                                      ),
-                                      Text(
-                                          'Hand Wash',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 12.0,
-                                          )
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            )
+                                  SizedBox(width: 5,),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 20, 0, 1),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                            'Wash Clothes',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14.0,
+                                            )
+                                        ),
+                                        Text(
+                                            'Hand Wash',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 12.0,
+                                            )
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              )
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -443,60 +476,83 @@ class _DashBoardState extends State<DashBoard> {
               ),
             ),
 
-            Padding(
-              padding: EdgeInsets.fromLTRB(20, 5, 0, 5),
-              child: Container(
-                height: MediaQuery.of(context).size.height - 700.0,
-                child: ListView(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(25, 0, 0, 20),
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.home,
-                                color: Colors.white,
-                                size: 25.0,
-                              ),
-                              Text(
-                                  'Home',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12.0,
-                                  )
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 25, 20),
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.shopping_basket,
-                                color: Colors.white,
-                                size: 25.0,
-                              ),
-                              Text(
-                                  'Orders',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12.0,
-                                  )
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            )
+            // Padding(
+            //   padding: EdgeInsets.fromLTRB(20, 0, 0, 5),
+            //   child: Container(
+            //     height: MediaQuery.of(context).size.height - 700.0,
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //       children: [
+            //         Padding(
+            //           padding: EdgeInsets.fromLTRB(25, 0, 0, 20),
+            //           child: Column(
+            //             children: [
+            //               Icon(
+            //                 Icons.home,
+            //                 color: Colors.white,
+            //                 size: 25.0,
+            //               ),
+            //               Text(
+            //                   'Home',
+            //                   style: TextStyle(
+            //                     color: Colors.white,
+            //                     fontSize: 12.0,
+            //                   )
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //         Padding(
+            //           padding: EdgeInsets.fromLTRB(0, 0, 25, 20),
+            //           child: Column(
+            //             children: [
+            //               Icon(
+            //                 Icons.shopping_basket,
+            //                 color: Colors.white,
+            //                 size: 25.0,
+            //               ),
+            //               Text(
+            //                   'Orders',
+            //                   style: TextStyle(
+            //                     color: Colors.white,
+            //                     fontSize: 12.0,
+            //                   )
+            //               ),
+            //             ],
+            //           ),
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            SizedBox(height: 10,),
           ],
+        ),
+      ),
+      bottomNavigationBar: SizedBox(
+        height: 50,
+        child: BottomNavigationBar(
+          backgroundColor: Color(0xff006DFF),
+          unselectedItemColor: Colors.white,
+          type: BottomNavigationBarType.fixed,
+          items: <BottomNavigationBarItem>
+          [
+            BottomNavigationBarItem(icon: Icon(Icons.home, size: 18,),
+              title: new Text(
+                  'Home',
+                  style: TextStyle(color: Colors.white, fontSize: 12.0,)
+              ),
+            ),
+            BottomNavigationBarItem(icon: Icon(Icons.shopping_basket, size: 18,),
+              title: new Text(
+                  'Orders',
+                  style: TextStyle(color: Colors.white, fontSize: 12.0,)
+              ),
+            ),
+          ],
+          currentIndex: selectedIndex,
+          onTap: ItemTapped,
+          fixedColor: Color(0xffFFA451),
         ),
       ),
     );

@@ -51,7 +51,6 @@ class _LoginPageState extends State<LoginPage> {
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: TextField(
                     // controller: _passwordController,
-                    obscureText: true,
                     style: TextStyle(fontSize: 14, color: Colors.black),
                     decoration: InputDecoration(
                       // keyboardType: TextInputType.number,
@@ -103,10 +102,10 @@ class _LoginPageState extends State<LoginPage> {
                     width: 320.0,
                     height: 50.0,
                     child: RaisedButton(
+                      color: Color(0xffFFA451),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(1.0),
                       ),
-                      color: Color(0xffFFA451),
                       onPressed: () async {
                         Navigator.push(
                           context,
