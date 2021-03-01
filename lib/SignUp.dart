@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sidan_app/LoginPage.dart';
 import 'package:services/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 void main() => runApp(
     MaterialApp(
@@ -15,6 +17,14 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  final auth = FirebaseAuth.instance;
+  DatabaseReference dbRef = FirebaseDatabase.instance.reference().child("Users");
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +62,7 @@ class _SignUpState extends State<SignUp> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: TextField(
-                    // controller: _passwordController
+                    controller: nameController,
                     style: TextStyle(fontSize: 14, color: Colors.black),
                     decoration: InputDecoration(
                       // keyboardType: TextInputType.number,
@@ -76,7 +86,7 @@ class _SignUpState extends State<SignUp> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: TextField(
-                    // controller: _passwordController,
+                    controller: phoneController,
                     style: TextStyle(fontSize: 14, color: Colors.black),
                     decoration: InputDecoration(
                       // keyboardType: TextInputType.number,
@@ -100,7 +110,7 @@ class _SignUpState extends State<SignUp> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: TextField(
-                    // controller: _passwordController,
+                    controller: emailController,
                     style: TextStyle(fontSize: 14, color: Colors.black),
                     decoration: InputDecoration(
                       // keyboardType: TextInputType.number,
@@ -124,7 +134,7 @@ class _SignUpState extends State<SignUp> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: TextField(
-                    // controller: _passwordController,
+                    controller: passwordController,
                     obscureText: true,
                     style: TextStyle(fontSize: 14, color: Colors.black),
                     decoration: InputDecoration(
@@ -157,10 +167,43 @@ class _SignUpState extends State<SignUp> {
                       ),
                       color: Color(0xffFFA451),
                       onPressed: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
-                        );
+                        dynamic _name = nameController.text;
+                        dynamic _phone = phoneController.text;
+                        dynamic _email = emailController.text;
+                        dynamic _password = passwordController.text;
+                        // auth.createUserWithEmailAndPassword(name: _name, phone: _phone, email: _email, password: _password).then((_){
+                        //   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
+                        // });
+                        auth..createUserWithEmailAndPassword(
+                            email: emailController.text, password: passwordController.text)
+                            .then((result) {
+                          dbRef.child(result.user.uid).set({
+                            "name": _name,
+                            "phone": _phone
+                          }).then((res) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => LoginPage()),
+                            );
+                          });
+                        }).catchError((err) {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Error"),
+                                  content: Text(err.message),
+                                  actions: [
+                                    FlatButton(
+                                      child: Text("Ok"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    )
+                                  ],
+                                );
+                              });
+                        });
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

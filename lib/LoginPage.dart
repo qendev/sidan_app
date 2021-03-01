@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sidan_app/DashBoard.dart';
-void main() => runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LoginPage(),
-    )
-);
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -13,6 +8,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  final auth = FirebaseAuth.instance;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: TextField(
-                    // controller: _passwordController,
+                    controller: emailController,
                     style: TextStyle(fontSize: 14, color: Colors.black),
                     decoration: InputDecoration(
                       // keyboardType: TextInputType.number,
@@ -74,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: TextField(
-                    // controller: _passwordController,
+                    controller: passwordController,
                     obscureText: true,
                     style: TextStyle(fontSize: 14, color: Colors.black),
                     decoration: InputDecoration(
@@ -106,11 +107,12 @@ class _LoginPageState extends State<LoginPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(1.0),
                       ),
-                      onPressed: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => DashBoard()),
-                        );
+                      onPressed: ()  {
+                        dynamic _email = emailController.text;
+                        dynamic _password = passwordController.text;
+                        auth.signInWithEmailAndPassword(email: _email, password: _password).then((_){
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => DashBoard()));
+                        });
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

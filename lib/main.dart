@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:sidan_app/SignUp.dart';
 import 'package:sidan_app/LoginPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyApp(),
-    )
-);
+// void main() => runApp(
+//     MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       home: MyApp(),
+//     )
+// );
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: MyApp(),
+      )
+  );
+}
 
 class MyApp extends StatefulWidget {
   @override
