@@ -3,6 +3,8 @@ import 'package:sidan_app/LoginPage.dart';
 import 'package:services/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() => runApp(
     MaterialApp(
@@ -22,7 +24,9 @@ class _SignUpState extends State<SignUp> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  final firestoreInstance = FirebaseFirestore.instance;
   final auth = FirebaseAuth.instance;
+
   DatabaseReference dbRef = FirebaseDatabase.instance.reference().child("Users");
 
   @override
@@ -174,18 +178,33 @@ class _SignUpState extends State<SignUp> {
                         // auth.createUserWithEmailAndPassword(name: _name, phone: _phone, email: _email, password: _password).then((_){
                         //   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
                         // });
-                        auth..createUserWithEmailAndPassword(
-                            email: emailController.text, password: passwordController.text)
+                        await auth.createUserWithEmailAndPassword(
+                            email: _email, password: _password)
                             .then((result) {
-                          dbRef.child(result.user.uid).set({
-                            "name": _name,
-                            "phone": _phone
+
+                          firestoreInstance.collection("users").doc(result.user.uid).set(
+                              {
+                                "name" : _name,
+                                "phone" : _phone,
+                                "email" : _email,
+                                "password" : _password,
+                              }).then((value){
+                            print('success!');
                           }).then((res) {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => LoginPage()),
-                            );
-                          });
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginPage(uid: result.user.uid)),
+                          );
+                        });
+                          // dbRef.child(result.user.uid).set({
+                          //   "name": _name,
+                          //   "phone": _phone
+                          // }).then((res) {
+                          //   Navigator.pushReplacement(
+                          //     context,
+                          //     MaterialPageRoute(builder: (context) => LoginPage()),
+                          //   );
+                          // });
                         }).catchError((err) {
                           showDialog(
                               context: context,
@@ -229,3 +248,4 @@ class _SignUpState extends State<SignUp> {
     );
   }
 }
+

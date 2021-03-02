@@ -3,6 +3,9 @@ import 'package:sidan_app/DashBoard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
+  LoginPage({this.uid});
+  final String uid;
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
