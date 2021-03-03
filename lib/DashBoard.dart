@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:sidan_app/CartOne.dart';
 import 'package:sidan_app/MyDart.dart';
 import 'package:sidan_app/ScheduleOrder.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() => runApp(
     MaterialApp(
@@ -11,11 +15,20 @@ void main() => runApp(
 );
 
 class DashBoard extends StatefulWidget {
+
+  final User user;
+
+  const DashBoard({Key key, this.user}) : super(key: key);
+
+
   @override
   _DashBoardState createState() => _DashBoardState();
 }
 
 class _DashBoardState extends State<DashBoard> {
+  final GlobalKey <ScaffoldState> _scaffoldKey = GlobalKey <ScaffoldState>();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
   int counter = 0;
   int selectedIndex = 1;
 
@@ -45,7 +58,7 @@ class _DashBoardState extends State<DashBoard> {
                       Row(
                         children: [
                           Text(
-                              'Hello Kante,',
+                              'Hello '+ widget.user.displayName+',',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18.0,

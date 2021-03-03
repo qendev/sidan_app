@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sidan_app/DashBoard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+
+ProgressDialog pr;
 
 class LoginPage extends StatefulWidget {
-  LoginPage({this.uid});
+  LoginPage({this.uid, User user});
+
   final String uid;
 
   @override
@@ -11,14 +15,33 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  ProgressDialog pr;
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   final auth = FirebaseAuth.instance;
 
-
   @override
   Widget build(BuildContext context) {
+    //initialize the progressbar
+    pr = new ProgressDialog(context);
+
+    //style the progressbar
+    pr.style(
+        message: 'Please Wait...',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: CircularProgressIndicator(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        progress: 0.0,
+        maxProgress: 100.0,
+        progressTextStyle: TextStyle(
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -41,13 +64,11 @@ class _LoginPageState extends State<LoginPage> {
                   padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
                   child: Row(
                     children: [
-                      Text(
-                          'Sign In',
+                      Text('Sign In',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18.0,
-                          )
-                      ),
+                          )),
                     ],
                   ),
                 ),
@@ -110,26 +131,34 @@ class _LoginPageState extends State<LoginPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(1.0),
                       ),
-                      onPressed: ()  {
-                        dynamic _email = emailController.text;
-                        dynamic _password = passwordController.text;
-                        auth.signInWithEmailAndPassword(email: _email, password: _password).then((_){
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => DashBoard()));
-                        });
+                      onPressed: () {
+                        // setState(() {
+                        //   pr.show();
+                        // });
+                        // dynamic _email = emailController.text;
+                        // dynamic _password = passwordController.text;
+                        // await auth.signInWithEmailAndPassword(email: _email, password: _password).then((_){
+                        //   setState(() {
+                        //     pr.hide();
+                        //   });
+                        //   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => DashBoard()));
+                        // });
+                        _signInWithEmailPassword();
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                              'NEXT',
-                              style: TextStyle(color: Colors.white, fontSize: 17.0,)
-                          ),
-                          Icon(
-                            Icons.keyboard_arrow_right,
-                            color: Colors.white,
-                          )
-                        ],
-                      ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('NEXT',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17.0,
+                                )),
+                            Icon(
+                              Icons.keyboard_arrow_right,
+                              color: Colors.white,
+                            )
+                          ],
+                        ),
                     ),
                   ),
                 ),
@@ -139,5 +168,31 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void _signInWithEmailPassword() async{
+    setState(() {
+      pr.show();
+    });
+    dynamic _email = emailController.text;
+    dynamic _password = passwordController.text;
+    try {
+      final User user = (await auth.signInWithEmailAndPassword(email: _email, password: _password)
+      ).user;
+
+      if (user != null) {
+        setState(() {
+          pr.hide();
+        });
+      }
+      Navigator.of(context).push(MaterialPageRoute(builder: (_){
+        return DashBoard(user: user,
+        );
+      }));
+    }
+    catch (e) {
+      print(e);
+    }
+
   }
 }

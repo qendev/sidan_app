@@ -3,6 +3,8 @@ import 'package:sidan_app/SignUp.dart';
 import 'package:sidan_app/LoginPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+
 
 // void main() => runApp(
 //     MaterialApp(
